@@ -24,4 +24,14 @@ export async function getPokemonList(
   return pokemonList;
 }
 
+export async function getTotalPokemonCount() {
+  const count: number = await fetch(
+    'https://pokeapi.co/api/v2/pokemon/?limit=1'
+  )
+    .then(response => response.json())
+    .then(data => data.count);
+
+  return count;
+}
+
 export function getPokemonDetail(pokemonId: number) {}

@@ -1,19 +1,37 @@
-import { getPokemonList } from '@/api/pokemonApi';
-import PokemonEntry from '@/components/PokemonEntry';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+
+import {
+  getPokemonList,
+  getTotalPokemonCount,
+} from '@/api/pokemonApi';
+import PokemonList from '@/components/PokemonList';
+import { QKEY_POKEMON_LIST } from '@/constants/query';
+
+const startPage = 1;
+const itemsPerPage = 6;
 
 export default async function Home() {
-  const pokemonList = await getPokemonList(1, 6);
+  const queryClient = new QueryClient();
+
+  const totalCount = await getTotalPokemonCount();
+  await queryClient.prefetchQuery({
+    queryKey: [QKEY_POKEMON_LIST, startPage],
+    queryFn: () => getPokemonList(startPage, itemsPerPage),
+  });
 
   return (
     <main>
-      <section className='flex flex-wrap gap-3 bg-green-200 justify-center'>
-        {pokemonList.map(pokemonEntry => (
-          <PokemonEntry
-            key={pokemonEntry.id}
-            pokemonEntry={pokemonEntry}
-          />
-        ))}
-      </section>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PokemonList
+          totalCount={totalCount}
+          currentPage={startPage}
+          itemsPerPage={itemsPerPage}
+        />
+      </HydrationBoundary>
     </main>
   );
 }
