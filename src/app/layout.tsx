@@ -1,13 +1,12 @@
+import QueryClientProvider from '@/providers/QueryClientProvider';
 import './globals.css';
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <QueryClientProvider>{children}</QueryClientProvider>
+      </body>
     </html>
   );
 }
