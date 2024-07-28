@@ -1,7 +1,7 @@
 export async function getPokemonList(
   pageNumber: number,
   itemsPerPage: number
-): Promise<PokemonEntry[]> {
+): Promise<PokemonEntryType[]> {
   const startId = (pageNumber - 1) * itemsPerPage + 1;
   const endId = pageNumber * itemsPerPage + 1;
 
@@ -19,7 +19,7 @@ export async function getPokemonList(
     );
   }
 
-  const pokemonList: PokemonEntry[] = await Promise.all(promises);
+  const pokemonList: PokemonEntryType[] = await Promise.all(promises);
 
   return pokemonList;
 }
